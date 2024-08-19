@@ -1,1 +1,3 @@
-pub mod cinemana;
+mod cinemana;
+
+pub use cinemana::Cinemana;

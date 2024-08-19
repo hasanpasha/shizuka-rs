@@ -1,6 +1,6 @@
-use serde::Deserialize;
-use crate::model::Medias as CrateMedias;
 use crate::model::Media as CrateMedia;
+use crate::model::Medias as CrateMedias;
+use serde::Deserialize;
 
 use super::MediaKind;
 
@@ -15,9 +15,14 @@ pub struct Media {
     pub kind: MediaKind,
 }
 
-impl Into<CrateMedia> for Media {
-    fn into(self: Media) -> CrateMedia {
-        CrateMedia{ id: self.id, title: self.title, year: self.year, kind: self.kind.into() }
+impl From<Media> for CrateMedia {
+    fn from(val: Media) -> Self {
+        CrateMedia {
+            id: val.id,
+            title: val.title,
+            year: val.year,
+            kind: val.kind.into(),
+        }
     }
 }
 
@@ -25,8 +30,8 @@ impl Into<CrateMedia> for Media {
 #[serde(transparent)]
 pub struct Medias(pub Vec<Media>);
 
-impl Into<CrateMedias> for Medias {
-    fn into(self) -> CrateMedias {
-        CrateMedias(self.0.iter().map(|x| x.to_owned().into()).collect())
+impl From<Medias> for CrateMedias {
+    fn from(val: Medias) -> Self {
+        CrateMedias(val.0.iter().map(|x| x.to_owned().into()).collect())
     }
 }

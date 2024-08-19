@@ -1,6 +1,9 @@
-use std::fmt;
-use serde::{de::{self, Visitor}, Deserialize, Deserializer};
 use crate::model::MediaKind as CrateMediaKind;
+use serde::{
+    de::{self, Visitor},
+    Deserialize, Deserializer,
+};
+use std::fmt;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum MediaKind {
@@ -19,9 +22,9 @@ impl From<CrateMediaKind> for MediaKind {
     }
 }
 
-impl Into<CrateMediaKind> for MediaKind {
-    fn into(self) -> CrateMediaKind {
-        match self {
+impl From<MediaKind> for CrateMediaKind {
+    fn from(val: MediaKind) -> Self {
+        match val {
             MediaKind::Movies => CrateMediaKind::Movies,
             MediaKind::Series => CrateMediaKind::Series,
             MediaKind::Unknown => CrateMediaKind::Unknown,
@@ -41,7 +44,8 @@ impl fmt::Display for MediaKind {
 
 impl<'de> Deserialize<'de> for MediaKind {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         struct IdVisitor;
 
@@ -53,13 +57,15 @@ impl<'de> Deserialize<'de> for MediaKind {
             }
 
             fn visit_string<E>(self, v: String) -> Result<Self::Value, E>
-                where
-                    E: de::Error, {
+            where
+                E: de::Error,
+            {
                 self.visit_str(v.as_str())
             }
 
             fn visit_str<E>(self, kind: &str) -> Result<Self::Value, E>
-                where E: de::Error
+            where
+                E: de::Error,
             {
                 match String::from(kind).to_lowercase().as_str() {
                     "1" | "movie" | "movies" => Ok(MediaKind::Movies),

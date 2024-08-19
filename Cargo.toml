@@ -3,10 +3,18 @@ name = "shizuka-rs"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "shizuka-cli"
+
 [dependencies]
 log = "0.4.0"
 env_logger = "0.11.5"
 tokio = { version = "1.24.2", features = ["full"]}
-reqwest = {version = "0.12.5", features = ["json"]}
-serde = { version = "1.0.152", features = ["derive"]}
+reqwest = {version = "0.12.6", features = ["json"]}
+serde = {version = "1.0.208", features = ["derive"]}
 chrono = "0.4.23"
+clap = {version = "4.5.16", features = ["unstable-doc"]}
+shlex = "1.3.0"
+cursive = "0.21.1"
+cursive-async-view = "0.8.0"
+cargo-watch = "8.5.2"

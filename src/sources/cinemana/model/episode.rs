@@ -1,13 +1,8 @@
-use std::cmp::Ordering;
-
-use serde::Deserialize;
 use crate::model::{
-    Episode as CrateEpisode,
-    Episodes as CrateEpisodes,
-    Season as CrateSeason,
-    Seasons as CrateSeasons
+    Episode as CrateEpisode, Episodes as CrateEpisodes, Season as CrateSeason,
+    Seasons as CrateSeasons,
 };
-
+use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Episode {
@@ -17,15 +12,21 @@ pub struct Episode {
     episode_number: String,
 }
 
-impl Into<CrateEpisode> for Episode {
-    fn into(self) -> CrateEpisode {
-        CrateEpisode { num: self.episode_number.parse().unwrap_or(0), id: self.nb }
+impl From<Episode> for CrateEpisode {
+    fn from(val: Episode) -> Self {
+        CrateEpisode {
+            num: val.episode_number.parse().unwrap_or(0),
+            id: val.nb,
+        }
     }
 }
 
-impl Into<CrateSeason> for Episode {
-    fn into(self) -> CrateSeason {
-        CrateSeason { num: self.season.parse().unwrap_or(0), episodes: CrateEpisodes::default() }
+impl From<Episode> for CrateSeason {
+    fn from(val: Episode) -> Self {
+        CrateSeason {
+            num: val.season.parse().unwrap_or(0),
+            episodes: CrateEpisodes::default(),
+        }
     }
 }
 
@@ -33,29 +34,19 @@ impl Into<CrateSeason> for Episode {
 #[serde(transparent)]
 pub struct Episodes(pub Vec<Episode>);
 
-impl Into<CrateSeasons> for Episodes {
-    fn into(self) -> CrateSeasons {
-        let mut seasons: Vec<CrateSeason> = self.0.iter().map(|x| x.to_owned().into()).collect();
-        seasons.sort_by(|a, b| cmp_seasons(a, b) );
+impl From<Episodes> for CrateSeasons {
+    fn from(val: Episodes) -> Self {
+        let mut seasons: Vec<CrateSeason> = val.0.iter().map(|x| x.to_owned().into()).collect();
+        seasons.sort_by(|a, b| a.num.cmp(&b.num));
         seasons.dedup_by(|a, b| a.num == b.num);
 
         for season in seasons.iter_mut() {
-            for episode in self.0.iter() {
+            for episode in val.0.iter() {
                 if episode.season.parse().unwrap_or(0) == season.num {
                     season.episodes.0.push(episode.to_owned().into());
                 }
             }
         }
         CrateSeasons(seasons)
-    }
-}
-
-fn cmp_seasons(a: &CrateSeason, b: &CrateSeason) -> Ordering {
-    if a.num > b.num {
-        Ordering::Greater
-    } else if a.num < b.num {
-        Ordering::Less
-    } else {
-        Ordering::Equal
     }
 }

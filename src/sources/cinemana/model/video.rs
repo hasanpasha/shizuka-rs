@@ -1,5 +1,5 @@
-use serde::Deserialize;
 use crate::model::{Video as CrateVideo, Videos as CrateVideos};
+use serde::Deserialize;
 
 #[derive(Deserialize, Clone, Debug)]
 pub struct Video {
@@ -9,9 +9,12 @@ pub struct Video {
     pub url: String,
 }
 
-impl Into<CrateVideo> for Video {
-    fn into(self) -> CrateVideo {
-        CrateVideo{ name: self.name, url: self.url }
+impl From<Video> for CrateVideo {
+    fn from(val: Video) -> Self {
+        CrateVideo {
+            name: val.name,
+            url: val.url,
+        }
     }
 }
 
@@ -19,8 +22,8 @@ impl Into<CrateVideo> for Video {
 #[serde(transparent)]
 pub struct Videos(pub Vec<Video>);
 
-impl Into<CrateVideos> for Videos {
-    fn into(self) -> CrateVideos {
-        CrateVideos(self.0.iter().map(|x| x.to_owned().into()).collect())
+impl From<Videos> for CrateVideos {
+    fn from(val: Videos) -> Self {
+        CrateVideos(val.0.iter().map(|x| x.to_owned().into()).collect())
     }
 }

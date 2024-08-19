@@ -1,0 +1,17 @@
+[package]
+name = "shizuka"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+log = "0.4.0"
+env_logger = "0.11.5"
+tokio = { version = "1.24.2", features = ["full"]}
+reqwest = {version = "0.12.5", features = ["json"]}
+serde = { version = "1.0.152", features = ["derive"]}
+serde_json = "1.0.125"
+chrono = "0.4.23"
+serde_repr = "0.1.19"
+url-builder = "0.1.1"
+strum = "0.26.3"
+strum_macros = "0.26.3"

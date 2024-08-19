@@ -1,6 +1,6 @@
 use log::info;
 
-use shizuka::{source::Source, sources::cinemana::Cinemana, model::MediaKind};
+use shizuka_rs::{source::Source, sources::cinemana::Cinemana, model::MediaKind};
 
 #[tokio::main]
 async fn main() {

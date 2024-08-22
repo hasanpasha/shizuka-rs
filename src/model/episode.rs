@@ -1,9 +1,10 @@
+use super::Media;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Episode {
     pub num: u32,
-    pub id: String,
+    pub media: Media,
 }
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct Episodes(pub Vec<Episode>);

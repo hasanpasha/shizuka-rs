@@ -1,10 +1,9 @@
 use super::Episodes;
 
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Season {
     pub num: u32,
-    pub episodes: Episodes
+    pub episodes: Episodes,
 }
 
 #[derive(Debug)]

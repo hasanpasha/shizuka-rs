@@ -1,6 +1,6 @@
 use super::MediaKind;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Media {
     pub id: String,
     pub title: String,

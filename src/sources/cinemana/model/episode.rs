@@ -1,5 +1,5 @@
 use crate::model::{
-    Episode as CrateEpisode, Episodes as CrateEpisodes, Season as CrateSeason,
+    Episode as CrateEpisode, Episodes as CrateEpisodes, Media, MediaKind, Season as CrateSeason,
     Seasons as CrateSeasons,
 };
 use serde::Deserialize;
@@ -10,13 +10,20 @@ pub struct Episode {
     season: String,
     #[serde(rename(deserialize = "episodeNummer"))]
     episode_number: String,
+    year: String,
+    en_title: String,
 }
 
 impl From<Episode> for CrateEpisode {
     fn from(val: Episode) -> Self {
         CrateEpisode {
             num: val.episode_number.parse().unwrap_or(0),
-            id: val.nb,
+            media: Media {
+                id: val.nb,
+                title: val.en_title,
+                year: val.year,
+                kind: MediaKind::Series,
+            },
         }
     }
 }

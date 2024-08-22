@@ -42,6 +42,8 @@ fn main() {
 
     siv.set_user_data(state);
 
+    siv.add_global_callback('q', Cursive::quit);
+
     let main_view = Dialog::new()
         .title("counter")
         .content(
@@ -102,32 +104,43 @@ fn play_video(s: &mut Cursive, video: &Video, subtitles: Subtitles) {
 
 fn play_media(s: &mut Cursive, media: &Media) {
     let state: &mut AppState = s.user_data().unwrap();
-    let videos = state
-        .runtime
-        .block_on(async { state.client.get_videos(media).await.unwrap() });
-    let subtitles = state
-        .runtime
-        .block_on(async { state.client.get_subtitles(media).await.unwrap() });
-    s.add_layer(
-        Dialog::around(
-            LinearLayout::horizontal().child(
-                SelectView::new()
-                    .with_all(
-                        videos
-                            .0
-                            .into_iter()
-                            .map(|video| (video.name.to_owned(), video)),
-                    )
-                    .on_submit(move |siv, video| {
-                        play_video(siv, video, subtitles.clone());
-                    })
-                    .with_name("select_video")
-                    .scrollable(),
-            ),
+
+    let media_stuff = state.runtime.block_on(async {
+        tokio::try_join!(
+            state.client.get_videos(media),
+            state.client.get_subtitles(media),
         )
-        .title("select video")
-        .dismiss_button("Cancel"),
-    );
+    });
+
+    if let Ok(stuff) = media_stuff {
+        s.add_layer(
+            Dialog::around(
+                LinearLayout::horizontal().child(
+                    SelectView::new()
+                        .with_all(
+                            stuff
+                                .0
+                                 .0
+                                .into_iter()
+                                .map(|video| (video.name.to_owned(), video)),
+                        )
+                        .on_submit(move |siv, video| {
+                            play_video(siv, video, stuff.1.clone());
+                        })
+                        .with_name("select_video")
+                        .scrollable(),
+                ),
+            )
+            .title("select video")
+            .dismiss_button("Cancel"),
+        );
+    } else {
+        s.add_layer(
+            Dialog::new()
+                .dismiss_button("OK")
+                .title("Could not pull videos or subtitles"),
+        );
+    }
 }
 
 fn search_media(s: &mut Cursive, query: &str, kind: MediaKind) {

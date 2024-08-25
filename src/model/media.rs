@@ -14,7 +14,7 @@ impl PartialEq for Media {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Medias(pub Vec<Media>);
 
 // #[derive(Deserialize, Debug)]

@@ -13,6 +13,10 @@ pub struct Media {
     pub year: String,
     #[serde(rename(deserialize = "kind"))]
     pub kind: MediaKind,
+    #[serde(rename(deserialize = "imgThumbObjUrl"))]
+    thumb: String,
+    #[serde(rename(deserialize = "imgMediumThumbObjUrl"))]
+    poster: String,
 }
 
 impl From<Media> for CrateMedia {
@@ -22,6 +26,8 @@ impl From<Media> for CrateMedia {
             title: val.title,
             year: val.year,
             kind: val.kind.into(),
+            thumbnail_url: Some(val.thumb),
+            poster_url: Some(val.poster),
         }
     }
 }

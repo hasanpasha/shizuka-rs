@@ -6,6 +6,8 @@ pub struct Media {
     pub title: String,
     pub year: String,
     pub kind: MediaKind,
+    pub thumbnail_url: Option<String>,
+    pub poster_url: Option<String>,
 }
 
 impl PartialEq for Media {

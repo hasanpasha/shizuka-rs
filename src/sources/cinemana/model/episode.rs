@@ -23,6 +23,8 @@ impl From<Episode> for CrateEpisode {
                 title: val.en_title,
                 year: val.year,
                 kind: MediaKind::Series,
+                thumbnail_url: None,
+                poster_url: None,
             },
         }
     }

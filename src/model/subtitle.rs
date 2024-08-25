@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Subtitle {
     pub name: String,
     pub extension: String,
@@ -13,5 +13,5 @@ pub struct Subtitle {
 //     UNKNOWN,
 // }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Subtitles(pub Vec<Subtitle>);

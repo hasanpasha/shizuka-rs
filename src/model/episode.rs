@@ -1,6 +1,6 @@
 use super::Media;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct Episode {
     pub num: u32,
     pub media: Media,

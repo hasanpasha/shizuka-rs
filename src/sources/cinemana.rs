@@ -12,6 +12,7 @@ use crate::model as crate_model;
 
 const API_BASE: &str = "https://cinemana.shabakaty.com/api/android/";
 
+#[derive(Debug, Clone, Default)]
 pub struct Cinemana {
     client: Client,
 }

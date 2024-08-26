@@ -68,11 +68,7 @@ fn main() {
             let kind_arc = select_kind
                 .selection()
                 .unwrap_or(Arc::new(MediaKind::Movies));
-            let kind = match kind_arc.as_ref().to_owned() {
-                MediaKind::Movies => MediaKind::Movies,
-                MediaKind::Series => MediaKind::Series,
-                _ => MediaKind::Unknown,
-            };
+            let kind = kind_arc.as_ref().to_owned();
 
             search_media(siv, &query.to_owned(), kind);
         })

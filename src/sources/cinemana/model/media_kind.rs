@@ -9,7 +9,6 @@ use std::fmt;
 pub enum MediaKind {
     Movies,
     Series,
-    Unknown,
 }
 
 impl From<CrateMediaKind> for MediaKind {
@@ -17,7 +16,6 @@ impl From<CrateMediaKind> for MediaKind {
         match value {
             CrateMediaKind::Movies => Self::Movies,
             CrateMediaKind::Series => Self::Series,
-            CrateMediaKind::Unknown => Self::Unknown,
         }
     }
 }
@@ -27,7 +25,6 @@ impl From<MediaKind> for CrateMediaKind {
         match val {
             MediaKind::Movies => CrateMediaKind::Movies,
             MediaKind::Series => CrateMediaKind::Series,
-            MediaKind::Unknown => CrateMediaKind::Unknown,
         }
     }
 }
@@ -37,7 +34,6 @@ impl fmt::Display for MediaKind {
         match self {
             Self::Movies => write!(f, "movies"),
             Self::Series => write!(f, "series"),
-            Self::Unknown => write!(f, "unknown"),
         }
     }
 }
@@ -70,7 +66,7 @@ impl<'de> Deserialize<'de> for MediaKind {
                 match String::from(kind).to_lowercase().as_str() {
                     "1" | "movie" | "movies" => Ok(MediaKind::Movies),
                     "2" | "series" => Ok(MediaKind::Series),
-                    _ => Ok(MediaKind::Unknown),
+                    _ => panic!("can't do it"),
                 }
             }
         }
